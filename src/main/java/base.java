@@ -2,6 +2,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import java.time.Duration;
@@ -15,7 +17,12 @@ public class base {
 
         System.setProperty("webdriver.chrome.driver", "drivers/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+//        Implicit wait
+//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
+//        Explicit wait
+        WebDriverWait w = new WebDriverWait(driver, Duration.ofSeconds(5));
 
         String[] itemsNeeded = {"Cucumber", "Brocolli", "Beetroot", "Carrot"};
 
@@ -27,8 +34,13 @@ public class base {
 
         driver.findElement(By.cssSelector("img[alt='Cart']")).click();
         driver.findElement(By.xpath("//button[normalize-space()='PROCEED TO CHECKOUT']")).click();
+        w.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[class='promoCode']")));
         driver.findElement(By.cssSelector("input[class='promoCode']")).sendKeys("rahulshettyacademy");
         driver.findElement(By.cssSelector("button[class='promoBtn']")).click();
+
+
+        w.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("span[class='promoInfo']")));
+
         System.out.println(driver.findElement(By.cssSelector("span[class='promoInfo']")).getText());
         driver.quit();
 
